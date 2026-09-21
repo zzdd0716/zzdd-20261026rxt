@@ -159,25 +159,25 @@
 | 前端页面/功能 | 前端分工 | 调用后端接口 | 后端分工 | 对应状态 |
 |---|---|---|---|---|
 | AdminLogin.vue 管理员登录 | 前端B | POST /api/auth/login | 后端A | ✅ |
-| AdminDashboard.vue 仪表盘 | 前端B | GET /api/admin/stats/overview | 后端A | ✅ |
+| AdminDashboard.vue 仪表盘 | 前端B | GET /api/admin/stats/overview | 后端C | ✅ |
 | AdminUsers.vue 用户管理 | 前端B | GET /api/admin/users | 后端A | ✅ |
 | 启用禁用用户 | 前端B | PUT /api/admin/users/{id}/status | 后端A | ✅ |
 | 修改用户角色 | 前端B | PUT /api/admin/users/{id}/role | 后端A | ✅ |
 | 删除用户 | 前端B | DELETE /api/admin/users/{id} | 后端A | ✅ |
 | AdminExperts.vue 专家审核 | 前端B | GET /api/admin/experts | 后端A | ✅ |
 | 审核通过/驳回 | 前端B | PUT /api/admin/experts/{id}/approve + /reject | 后端A | ✅ |
-| AdminProducts.vue 商品管理 | 前端B | GET /api/admin/products | 后端A | ✅ |
-| 商品审核 | 前端B | PUT /api/admin/products/{id}/approve + /reject | 后端A | ✅ |
-| 强制上下架 | 前端B | PUT /api/admin/products/{id}/status | 后端A | ✅ |
-| 删除商品 | 前端B | DELETE /api/admin/products/{id} | 后端A | ✅ |
-| AdminDemands.vue 需求管理 | 前端B | GET /api/admin/demands | 后端A | ✅ |
-| 删除需求 | 前端B | DELETE /api/admin/demands/{id} | 后端A | ✅ |
-| AdminOrders.vue 订单管理 | 前端B | GET /api/admin/orders | 后端A | ✅ |
-| AdminFinances.vue 融资审核 | 前端B | GET /api/admin/finances | 后端A | ✅ |
-| 审核融资申请 | 前端B | PUT /api/admin/finances/{id}/approve + /reject | 后端A | ✅ |
-| AdminKnowledges.vue 知识管理 | 前端B | GET /api/admin/knowledges | 后端A | ✅ |
-| 下架/上架知识 | 前端B | PUT /api/admin/knowledges/{id}/status | 后端A | ✅ |
-| 删除知识 | 前端B | DELETE /api/admin/knowledges/{id} | 后端A | ✅ |
+| AdminProducts.vue 商品管理 | 前端B | GET /api/admin/products | 后端B | ✅ |
+| 商品审核 | 前端B | PUT /api/admin/products/{id}/approve + /reject | 后端B | ✅ |
+| 强制上下架 | 前端B | PUT /api/admin/products/{id}/status | 后端B | ✅ |
+| 删除商品 | 前端B | DELETE /api/admin/products/{id} | 后端B | ✅ |
+| AdminDemands.vue 需求管理 | 前端B | GET /api/admin/demands | 后端B | ✅ |
+| 删除需求 | 前端B | DELETE /api/admin/demands/{id} | 后端B | ✅ |
+| AdminOrders.vue 订单管理 | 前端B | GET /api/admin/orders | 后端B | ✅ |
+| AdminFinances.vue 融资审核 | 前端B | GET /api/admin/finances | 后端C | ✅ |
+| 审核融资申请 | 前端B | PUT /api/admin/finances/{id}/approve + /reject | 后端C | ✅ |
+| AdminKnowledges.vue 知识管理 | 前端B | GET /api/admin/knowledges | 后端C | ✅ |
+| 下架/上架知识 | 前端B | PUT /api/admin/knowledges/{id}/status | 后端C | ✅ |
+| 删除知识 | 前端B | DELETE /api/admin/knowledges/{id} | 后端C | ✅ |
 | AdminCategories.vue 分类管理 | 前端B | GET /api/category | 后端A | ✅ |
 | 新增分类 | 前端B | POST /api/category | 后端A | ✅ |
 | 修改分类 | 前端B | PUT /api/category/{id} | 后端A | ✅ |
@@ -200,10 +200,10 @@
 
 | 后端 | 提供接口数 | 被前端调用 | 未被前端调用 |
 |---|---|---|---|
-| 后端A（基础设施+管理员） | 37 | 36 | 1（multi upload 用得少） |
-| 后端B（交易+专家） | 40 | 40 | 0 |
-| 后端C（知识+融资） | 15 | 15 | 0 |
-| **合计** | **约 92** | **约 91** | **约 1** |
+| 后端A（基础设施：认证+用户+分类+上传+用户管理员+专家管理员） | 23 | 22 | 1（multi upload 用得少） |
+| 后端B（交易：商品+需求+购物车+订单+专家+问答+预约 + 各自管理员接口） | 49 | 49 | 0 |
+| 后端C（知识+融资 + 各自管理员接口 + 统计概览） | 21 | 21 | 0 |
+| **合计** | **约 93** | **约 92** | **约 1** |
 
 ### 按前端分工统计
 

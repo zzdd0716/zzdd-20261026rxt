@@ -1,7 +1,14 @@
 # 后端 B - 交易 + 专家模块
 
 ## 负责范围
-商品货源、采购需求、购物车、订单、专家、在线问答、专家预约
+商品/货源模块（普通 + 管理员审核）
+采购需求模块（普通 + 管理员）
+购物车模块
+订单模块（普通 + 管理员列表）
+专家模块
+在线问答模块
+专家预约模块
+商品管理员、需求管理员、订单管理员
 
 ---
 
@@ -1227,5 +1234,247 @@ PUT /api/appointment/{id}/cancel
 
 ---
 
+## 八、商品管理员接口
+
+### 8.1 商品列表（管理员）
+
+**请求**
+```
+GET /api/admin/products
+```
+
+**请求参数 (Query)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| auditStatus | int | 否 | 0待审核/1通过/2驳回 |
+| status | int | 否 | 0下架/1上架 |
+| keyword | string | 否 | 搜索商品名 |
+| pageNum | int | 否 | 页码，默认 1 |
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "name": "红富士苹果 5斤装",
+        "price": 29.90,
+        "stock": 5000,
+        "image": "/images/p1.jpg",
+        "auditStatus": 1,
+        "status": 1,
+        "seller": { "id": 2, "realName": "李四" },
+        "createTime": "2026-09-10 10:00:00"
+      }
+    ],
+    "total": 287,
+    "pageNum": 1,
+    "pageSize": 10,
+    "pages": 29
+  }
+}
+```
+
+---
+
+### 8.2 商品审核通过
+
+**请求**
+```
+PUT /api/admin/products/{id}/approve
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+### 8.3 商品审核驳回
+
+**请求**
+```
+PUT /api/admin/products/{id}/reject
+Content-Type: application/json
+```
+
+**请求参数 (Body)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| auditRemark | String(255) | ⭕ | 驳回原因 |
+
+**请求示例**
+```json
+{ "auditRemark": "商品图片不清晰，请重新上传" }
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+### 8.4 商品强制上下架
+
+**请求**
+```
+PUT /api/admin/products/{id}/status
+Content-Type: application/json
+```
+
+**请求参数 (Body)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| status | int | ✅ | 0=下架 1=上架 |
+
+**请求示例**
+```json
+{ "status": 0 }
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+### 8.5 删除商品（管理员）
+
+**请求**
+```
+DELETE /api/admin/products/{id}
+```
+
+**路径参数**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| id | long | 是 | 商品ID |
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+## 九、需求管理员接口
+
+### 9.1 需求列表（管理员）
+
+**请求**
+```
+GET /api/admin/demands
+```
+
+**请求参数 (Query)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| status | int | 否 | 0已关闭/1进行中/2已完成 |
+| keyword | string | 否 | 搜索需求名称 |
+| pageNum | int | 否 | 页码，默认 1 |
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "name": "需要苹果纸箱",
+        "quantity": 5000,
+        "expectedPrice": 2.50,
+        "status": 1,
+        "buyer": { "id": 3, "realName": "王五" },
+        "createTime": "2026-09-10 10:00:00"
+      }
+    ],
+    "total": 45,
+    "pageNum": 1,
+    "pageSize": 10,
+    "pages": 5
+  }
+}
+```
+
+---
+
+### 9.2 删除需求（管理员）
+
+**请求**
+```
+DELETE /api/admin/demands/{id}
+```
+
+**路径参数**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| id | long | 是 | 需求ID |
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+## 十、订单管理员接口
+
+### 10.1 订单列表（管理员）
+
+**请求**
+```
+GET /api/admin/orders
+```
+
+**请求参数 (Query)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| status | int | 否 | 0待支付/1已支付/2已发货/3已完成/4已取消 |
+| orderNo | string | 否 | 订单号搜索 |
+| pageNum | int | 否 | 页码，默认 1 |
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "orderNo": "RX20260920001",
+        "totalAmount": 290.00,
+        "status": 3,
+        "refundStatus": 0,
+        "buyer": { "id": 3, "realName": "王五" },
+        "seller": { "id": 2, "realName": "李四" },
+        "createTime": "2026-09-18 10:28:00"
+      }
+    ],
+    "total": 1203,
+    "pageNum": 1,
+    "pageSize": 10,
+    "pages": 121
+  }
+}
+```
+
+---
+
 ## 本次涉及数据库表
-`product`、`demand`、`cart`、`orders`、`order_item`、`qa`、`qa_reply`、`appointment`、`expert`（读）、`user`（读）、`address`（读）
+`product`（管理）、`demand`（管理）、`cart`、`orders`（管理）、`order_item`（管理）、`qa`、`qa_reply`、`appointment`、`expert`（读）、`user`（读）、`address`（读）

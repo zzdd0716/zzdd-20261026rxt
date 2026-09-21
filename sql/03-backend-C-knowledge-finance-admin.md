@@ -1,7 +1,9 @@
 # 后端 C - 农业知识 + 融资管理
 
 ## 负责范围
-农业知识模块、融资管理模块。
+农业知识模块（普通 + 管理员）
+融资管理模块（普通 + 管理员）
+数据统计概览（仪表盘）
 
 ---
 
@@ -617,5 +619,235 @@ DELETE /api/finance/{id}
 
 ---
 
+## 三、融资管理员接口
+
+### 3.1 融资申请列表（管理员）
+
+**请求**
+```
+GET /api/admin/finances
+```
+
+**请求参数 (Query)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| status | int | 否 | 0待审核/1通过/2拒绝 |
+| pageNum | int | 否 | 页码，默认 1 |
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "title": "红富士果园扩建项目融资",
+        "amount": 200000.00,
+        "purpose": "果园扩建",
+        "status": 1,
+        "user": { "id": 2, "realName": "李四" },
+        "product": { "id": 1, "bankName": "农业银行", "name": "农E贷-种植贷" },
+        "createTime": "2026-09-20 10:00:00"
+      }
+    ],
+    "total": 18,
+    "pageNum": 1,
+    "pageSize": 10,
+    "pages": 2
+  }
+}
+```
+
+---
+
+### 3.2 融资审核通过
+
+**请求**
+```
+PUT /api/admin/finances/{id}/approve
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+### 3.3 融资审核驳回
+
+**请求**
+```
+PUT /api/admin/finances/{id}/reject
+Content-Type: application/json
+```
+
+**请求参数 (Body)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| reviewRemark | String | ⭕ | 驳回原因 |
+
+**请求示例**
+```json
+{ "reviewRemark": "资料不完整，请补充后重新申请" }
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+## 四、知识管理员接口
+
+### 4.1 知识列表（管理员）
+
+**请求**
+```
+GET /api/admin/knowledges
+```
+
+**请求参数 (Query)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| keyword | string | 否 | 搜索标题 |
+| status | int | 否 | 0下架/1上架 |
+| pageNum | int | 否 | 页码，默认 1 |
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "title": "红富士苹果优质栽培技术要点",
+        "categoryId": 2,
+        "viewCount": 1281,
+        "likeCount": 56,
+        "status": 1,
+        "author": { "id": 5, "realName": "陈农师" },
+        "createTime": "2026-09-15 10:00:00"
+      }
+    ],
+    "total": 56,
+    "pageNum": 1,
+    "pageSize": 10,
+    "pages": 6
+  }
+}
+```
+
+---
+
+### 4.2 知识上下架
+
+**请求**
+```
+PUT /api/admin/knowledges/{id}/status
+Content-Type: application/json
+```
+
+**路径参数**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| id | long | 是 | 知识文章ID |
+
+**请求参数 (Body)**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| status | int | ✅ | 0=下架 1=上架 |
+
+**请求示例**
+```json
+{ "status": 0 }
+```
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+### 4.3 删除知识（管理员）
+
+**请求**
+```
+DELETE /api/admin/knowledges/{id}
+```
+
+**路径参数**
+
+| 参数名 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| id | long | 是 | 知识文章ID |
+
+**响应示例**
+```json
+{ "code": 200, "msg": "success", "data": null }
+```
+
+---
+
+## 五、数据统计概览（管理员仪表盘）
+
+### 5.1 统计概览
+
+**请求**
+```
+GET /api/admin/stats/overview
+```
+
+> 此接口聚合各模块统计数据，实现方式建议：在 Service 层通过方法调用获取各模块统计（product/demand/order/finance/knowledge），返回一次性数据。
+
+**响应示例**
+```json
+{
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "userCount": 152,
+    "expertCount": 23,
+    "productCount": 287,
+    "demandCount": 45,
+    "orderCount": 1203,
+    "orderAmount": 856200.50,
+    "financeApplyCount": 18,
+    "financeAmount": 3500000.00,
+    "knowledgeCount": 56,
+    "recentOrders": [
+      {
+        "orderNo": "RX20260920001",
+        "buyerName": "王五",
+        "totalAmount": 290.00,
+        "status": 3,
+        "createTime": "2026-09-18 10:28:00"
+      }
+    ],
+    "recentFinanceApplies": [
+      {
+        "title": "红富士果园扩建项目融资",
+        "userName": "李四",
+        "amount": 200000.00,
+        "status": 1
+      }
+    ]
+  }
+}
+```
+
+---
+
 ## 本次涉及数据库表
-`knowledge`、`finance_apply`、`finance_product`
+`knowledge`（含管理）、`finance_apply`（含管理）、`finance_product`（管理时只读）、`product`（读）、`demand`（读）、`orders`（读）、`order_item`（读）、`user`（只读统计）
