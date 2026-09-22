@@ -27,6 +27,8 @@ public class Product {
     private String origin;
     private Integer auditStatus;
     private Integer status;
+    /** 驳回原因（模块8：product 表已补 audit_remark 列） */
+    private String auditRemark;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

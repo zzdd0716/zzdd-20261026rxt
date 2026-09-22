@@ -93,6 +93,7 @@ CREATE TABLE `product` (
   `description` TEXT,
   `origin` VARCHAR(100),
   `audit_status` TINYINT DEFAULT 1 COMMENT '0-待审核 1-审核通过 2-已驳回',
+  `audit_remark` VARCHAR(255) COMMENT '驳回原因',
   `status` TINYINT DEFAULT 1 COMMENT '0-下架 1-上架',
   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `update_time` DATETIME ON UPDATE CURRENT_TIMESTAMP,
