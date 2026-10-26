@@ -41,7 +41,10 @@ import java.util.stream.Collectors;
  * 状态机：0待回答 -> 1已回答（有人回答）；2已关闭（预留）
  */
 @Service
-public class QaServiceImpl implements QaService {
+public class
+
+
+QaServiceImpl implements QaService {
 
     /** 问题状态 */
     private static final int STATUS_WAITING = 0;  // 待回答

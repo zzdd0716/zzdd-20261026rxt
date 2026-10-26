@@ -1,11 +1,11 @@
 server:
-  port: 8088
+  port: 8080
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/rongxiaotong?serverTimezone=GMT%2B8&useUnicode=true&characterEncodeing=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     username: root #记得修改为自己的数据库用户名
-    password: 79365920 #记得修改为自己的数据库密码
+    password: ${DB_PASSWORD:your-db-password} #记得修改为自己的数据库密码
   jackson:
     time-zone: GMT+8
   servlet:
